@@ -1,7 +1,4 @@
-"""Advent of Code Day 1: Trebuchet?
-
-The problem description can be found at https://adventofcode.com/2023/day/1
-"""
+"""Advent of Code 2023 :: Day 1 :: Trebuchet."""
 from pathlib import Path
 
 
@@ -34,6 +31,7 @@ def calibrate(input: Path, verbose: bool = False) -> int:
                 combinations[front[:-1] + back] = str(numbers[front]) + str(
                     numbers[back]
                 )
+
     # Open the file for reading.
     with open(input) as data:
         # Read the file contents.
@@ -42,22 +40,19 @@ def calibrate(input: Path, verbose: bool = False) -> int:
         for line in contents.splitlines():
             original: str = line
             # Search and replace all combinations in the line.
-            for combination in combinations.keys():
-                if combination in line:
-                    line = line.replace(combination, combinations[combination])
+            for combination, replacement in combinations.items():
+                line = line.replace(combination, replacement)
             # Search and replace all numbers in the line.
-            for number in numbers.keys():
-                if number in line:
-                    line = line.replace(number, numbers[number])
-            # Remove all non-digits characters from the line
-            for character in line:
-                if not character.isdigit():
-                    line = line.replace(character, "")
+            for number, replacement in numbers.items():
+                line = line.replace(number, replacement)
+            # Remove all non-digit characters from the line.
+            line = "".join(filter(str.isdigit, line))
             # Calculate the calibration value of the line.
             calibration: int = int(line[0] + line[-1])
             if verbose:
                 print(original, line, calibration)
             calibrations.append(calibration)
+
     # Print the sum of the calibrations.
     print(f"Sum of calibrations: {sum(calibrations)}")
     return sum(calibrations)
