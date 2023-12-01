@@ -1,2 +1,1 @@
-# adventures
-Advent of Code
+# Adventures in Code
