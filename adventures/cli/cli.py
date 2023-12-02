@@ -33,7 +33,7 @@ now = datetime.now()
 )
 @click.option(
     "--url",
-    default=f"https://adventofcode.com/{now.year}/day/{now.day}/input",
+    default="https://adventofcode.com/",
     show_default=True,
     help="url",
 )
@@ -56,6 +56,7 @@ def get(day: int, year: int, save_path: str, url: str, session: str):
     """
     click.echo(f"Getting a new adventure for Dec {day}, {year}...")
     click.echo(f"Saving to {save_path}...")
+    url = f"{url}{year}/day/{day}/input"
     click.echo(f"Getting input from {url}...")
 
     # If the path does not exist, create it.
