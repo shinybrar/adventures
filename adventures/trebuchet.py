@@ -1,14 +1,26 @@
-"""Advent of Code 2023 :: Day 1 :: Trebuchet."""
+"""Advent of Code 2023 :: Day 1 :: Trebuchet?!."""
+import logging
 from pathlib import Path
 
+from rich.logging import RichHandler
 
-def calibrate(input: Path, verbose: bool = False) -> int:
+FORMAT = "%(message)s"
+logging.basicConfig(
+    level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
+)
+log = logging.getLogger(__name__)
+
+
+def calibrate(input: Path, verbose: bool = True) -> int:
     """Calibrate the trebuchet.
 
     Args:
         input (Path): Path to the input file.
         verbose (bool, optional): Print more. Defaults to False.
     """
+    if verbose:
+        log.setLevel(logging.DEBUG)
+        log.debug("Verbose logging enabled.")
     calibrations: list[int] = []
     numbers: dict[str, str] = {
         "one": "1",
@@ -49,14 +61,13 @@ def calibrate(input: Path, verbose: bool = False) -> int:
             line = "".join(filter(str.isdigit, line))
             # Calculate the calibration value of the line.
             calibration: int = int(line[0] + line[-1])
-            if verbose:
-                print(original, line, calibration)
+            log.debug(f"{original} -> {line} -> {calibration}")
             calibrations.append(calibration)
 
     # Print the sum of the calibrations.
-    print(f"Sum of calibrations: {sum(calibrations)}")
+    log.info(f"Sum of calibrations: {sum(calibrations)}")
     return sum(calibrations)
 
 
 if __name__ == "__main__":
-    calibrate(Path("inputs/d1-trebuchet.txt"), verbose=False)
+    calibrate(Path("inputs/d1-trebuchet.txt"), verbose=True)
