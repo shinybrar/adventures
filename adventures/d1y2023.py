@@ -1,6 +1,5 @@
 """Advent of Code 2023 :: Day 1 :: Trebuchet?!."""
 import logging
-from pathlib import Path
 
 from rich.logging import RichHandler
 
@@ -11,7 +10,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-def run(input: Path, verbose: bool = True) -> int:
+def run(input: str, verbose: bool = True) -> int:
     """Calibrate the trebuchet.
 
     Args:
@@ -43,31 +42,21 @@ def run(input: Path, verbose: bool = True) -> int:
                 combinations[front[:-1] + back] = str(numbers[front]) + str(
                     numbers[back]
                 )
-
-    # Open the file for reading.
-    with open(input) as data:
-        # Read the file contents.
-        contents = data.read()
-        # Start reading the line by each character and replace the words with numbers.
-        for line in contents.splitlines():
-            original: str = line
-            # Search and replace all combinations in the line.
-            for combination, replacement in combinations.items():
-                line = line.replace(combination, replacement)
-            # Search and replace all numbers in the line.
-            for number, replacement in numbers.items():
-                line = line.replace(number, replacement)
-            # Remove all non-digit characters from the line.
-            line = "".join(filter(str.isdigit, line))
-            # Calculate the calibration value of the line.
-            calibration: int = int(line[0] + line[-1])
-            log.debug(f"{original} -> {line} -> {calibration}")
-            calibrations.append(calibration)
+    for line in input.splitlines():
+        original: str = line
+        # Search and replace all combinations in the line.
+        for combination, replacement in combinations.items():
+            line = line.replace(combination, replacement)
+        # Search and replace all numbers in the line.
+        for number, replacement in numbers.items():
+            line = line.replace(number, replacement)
+        # Remove all non-digit characters from the line.
+        line = "".join(filter(str.isdigit, line))
+        # Calculate the calibration value of the line.
+        calibration: int = int(line[0] + line[-1])
+        log.debug(f"{original} -> {line} -> {calibration}")
+        calibrations.append(calibration)
 
     # Print the sum of the calibrations.
     log.info(f"Sum of calibrations: {sum(calibrations)}")
     return sum(calibrations)
-
-
-if __name__ == "__main__":
-    run(Path("inputs/2023/1.txt"), verbose=True)

@@ -1,8 +1,11 @@
 """Advent of Code 2023 :: Day 2 :: Trebuchet?!."""
 
-from pathlib import Path
 
-
-def run(input: Path, verbose: bool = True) -> None:
+def run(input: str, verbose: bool = True):
     """Go on the adventure."""
-    pass
+    if verbose:
+        print("Verbose logging enabled.")
+    print("Going on the adventure.")
+    print(input)
+    print(verbose)
+    print("Done!")

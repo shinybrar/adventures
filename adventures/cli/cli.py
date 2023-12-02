@@ -1,4 +1,5 @@
 """CLI for adventures."""
+import importlib
 from datetime import datetime
 from os import environ
 from pathlib import Path
@@ -9,7 +10,7 @@ import requests
 now = datetime.now()
 
 
-@click.command("get", help="Get input for new adventure")
+@click.command("get", help="Get an adventure")
 @click.option(
     "-d",
     "--day",
@@ -69,6 +70,69 @@ def get(day: int, year: int, save_path: str, url: str, session: str):
     click.echo("Done!")
 
 
+@click.command("run", help="Run an adventure")
+@click.option(
+    "-d",
+    "--day",
+    default=now.day,
+    show_default=True,
+    help="day of the adventure, default is today",
+)
+@click.option(
+    "-y",
+    "--year",
+    default=now.year,
+    show_default=True,
+    help="year of the adventure, default is this year",
+)
+@click.option(
+    "-c",
+    "--code",
+    default=f"adventures.d{now.day}y{now.year}:run",
+    show_default=True,
+    help="code to run",
+)
+@click.option(
+    "-i",
+    "--input",
+    default=f"inputs/{now.year}/{now.day}.txt",
+    type=click.Path(exists=True),
+    show_default=True,
+    help="path to the input file",
+)
+@click.option(
+    "-v",
+    "--verbose",
+    default=False,
+    show_default=True,
+    help="verbose logging",
+)
+def run(day: int, year: int, code: str, input: str, verbose: bool):
+    """Run an adventure.
+
+    Args:
+        day (int): Day of the adventure, default is today
+        year (int): Year of the adventure, default is this year
+        code (str): Code to run
+        input (str): Path to the input file
+        verbose (bool): Verbose logging
+    """
+    click.echo(f"Running adventure for Dec {day}, {year}...")
+    click.echo(f"Code Import: {code}...")
+    # Import the code to run.
+    mod, func = code.split(":")
+    module = importlib.import_module(mod)
+    function = getattr(module, func)
+    # Read the input.
+    click.echo("Reading input...")
+    with open(input) as filename:
+        data = filename.read()
+    # Run the code.
+    click.echo("Running...")
+    function(input=data, verbose=verbose)
+    click.echo("Done!")
+
+
 @click.group()
 def cli():
     """CLI for adventures."""
@@ -76,6 +140,7 @@ def cli():
 
 
 cli.add_command(get)
+cli.add_command(run)
 
 if __name__ == "__main__":
     cli()
