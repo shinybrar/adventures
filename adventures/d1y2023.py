@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 
 
 def run(input: str, verbose: bool = True) -> int:
-    """Calibrate the trebuchet.
+    """Calibrate the trebuchet?!.
 
     Args:
         input (Path): Path to the input file.
