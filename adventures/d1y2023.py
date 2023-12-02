@@ -11,7 +11,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-def calibrate(input: Path, verbose: bool = True) -> int:
+def run(input: Path, verbose: bool = True) -> int:
     """Calibrate the trebuchet.
 
     Args:
@@ -70,4 +70,4 @@ def calibrate(input: Path, verbose: bool = True) -> int:
 
 
 if __name__ == "__main__":
-    calibrate(Path("inputs/d1-trebuchet.txt"), verbose=True)
+    run(Path("inputs/2023/1.txt"), verbose=True)
