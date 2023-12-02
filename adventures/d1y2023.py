@@ -1,25 +1,14 @@
 """Advent of Code 2023 :: Day 1 :: Trebuchet?!."""
-import logging
-
-from rich.logging import RichHandler
-
-FORMAT = "%(message)s"
-logging.basicConfig(
-    level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
-)
-log = logging.getLogger(__name__)
+from adventures.cli.cli import log
 
 
-def run(input: str, verbose: bool = True) -> int:
+def run(input: str) -> int:
     """Calibrate the trebuchet?!.
 
     Args:
         input (Path): Path to the input file.
         verbose (bool, optional): Print more. Defaults to False.
     """
-    if verbose:
-        log.setLevel(logging.DEBUG)
-        log.debug("Verbose logging enabled.")
     calibrations: list[int] = []
     numbers: dict[str, str] = {
         "one": "1",
@@ -42,6 +31,8 @@ def run(input: str, verbose: bool = True) -> int:
                 combinations[front[:-1] + back] = str(numbers[front]) + str(
                     numbers[back]
                 )
+    log.debug(f"Numbers: {numbers}")
+    log.debug(f"Combinations: {combinations}")
     for line in input.splitlines():
         original: str = line
         # Search and replace all combinations in the line.

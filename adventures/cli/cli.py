@@ -1,11 +1,19 @@
 """CLI for adventures."""
 import importlib
+import logging
 from datetime import datetime
 from os import environ
 from pathlib import Path
 
 import click
 import requests
+from rich.logging import RichHandler
+
+FORMAT = "%(message)s"
+logging.basicConfig(
+    level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
+)
+log = logging.getLogger(__name__)
 
 now = datetime.now()
 
@@ -87,14 +95,6 @@ def get(day: int, year: int, save_path: str, url: str, session: str):
     help="year of the adventure, default is this year",
 )
 @click.option(
-    "-i",
-    "--input",
-    default=f"inputs/{now.year}/{now.day}.txt",
-    type=click.Path(exists=True),
-    show_default=True,
-    help="path to the input file",
-)
-@click.option(
     "-v",
     "--verbose",
     default=False,
@@ -102,7 +102,7 @@ def get(day: int, year: int, save_path: str, url: str, session: str):
     show_default=True,
     help="verbose logging",
 )
-def run(day: int, year: int, input: str, verbose: bool):
+def run(day: int, year: int, verbose: bool):
     """Run an adventure.
 
     Args:
@@ -112,7 +112,11 @@ def run(day: int, year: int, input: str, verbose: bool):
         input (str): Path to the input file
         verbose (bool): Verbose logging
     """
+    if verbose:
+        log.setLevel(logging.DEBUG)
+        log.debug("Verbose logging enabled.")
     code: str = f"adventures.d{day}y{year}:run"
+    input: str = f"inputs/{year}/{day}.txt"
     click.echo(f"Running adventure for Dec {day}, {year}...")
     click.echo(f"Code Import: {code}...")
     # Import the code to run.
@@ -125,7 +129,7 @@ def run(day: int, year: int, input: str, verbose: bool):
         data = filename.read()
     # Run the code.
     click.echo("Running...")
-    function(input=data, verbose=verbose)
+    function(input=data)
 
 
 @click.group()

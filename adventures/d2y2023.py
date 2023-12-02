@@ -1,17 +1,8 @@
 """Advent of Code 2023 :: Day 2 :: Cube Conundrum."""
-
-import logging
-
-from rich.logging import RichHandler
-
-FORMAT = "%(message)s"
-logging.basicConfig(
-    level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
-)
-log = logging.getLogger(__name__)
+from adventures.cli.cli import log
 
 
-def run(input: str, verbose: bool = False) -> int:
+def run(input: str) -> int:
     """Cube Conundrum.
 
     Args:
@@ -22,10 +13,6 @@ def run(input: str, verbose: bool = False) -> int:
         int: _description_
     """
     log.info("Going on an adventure!")
-    if verbose:
-        log.setLevel(logging.DEBUG)
-        log.debug("Verbose logging enabled.")
-
     # Maximum possible cubes of each color
     red: int = 12
     green: int = 13
