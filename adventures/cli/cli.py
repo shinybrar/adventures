@@ -132,6 +132,41 @@ def run(day: int, year: int, verbose: bool):
     function(input=data)
 
 
+@click.command("roll", help="Roll an adventure")
+@click.option(
+    "-d",
+    "--day",
+    default=now.day,
+    show_default=True,
+    help="day of the adventure, default is today",
+)
+@click.option(
+    "-y",
+    "--year",
+    default=now.year,
+    show_default=True,
+    help="year of the adventure, default is this year",
+)
+def roll(day: int, year: int):
+    """Roll an adventure.
+
+    Args:
+        day (int): Day of the adventure, default is today
+        year (int): Year of the adventure, default is this year
+    """
+    # Copy the code template adventures/dXyX.py to adventures/dXyXXXX.py
+
+    filename = f"adventures/d{day}y{year}.py"
+    click.echo(f"Rolling adventure for Dec {day}, {year}...")
+    click.echo(f"Filename: {filename}...")
+
+    # Copy the source template to the new filename.
+    with open("adventures/dXyX.py") as template:
+        with open(filename, "w") as new_file:
+            new_file.write(template.read())
+    click.echo("Done!")
+
+
 @click.group()
 def cli():
     """CLI for adventures."""
@@ -140,6 +175,7 @@ def cli():
 
 cli.add_command(get)
 cli.add_command(run)
+cli.add_command(roll)
 
 if __name__ == "__main__":
     cli()
