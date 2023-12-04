@@ -95,6 +95,14 @@ def get(day: int, year: int, save_path: str, url: str, session: str):
     help="year of the adventure, default is this year",
 )
 @click.option(
+    "-e",
+    "--example",
+    is_flag=True,
+    default=False,
+    show_default=True,
+    help="run the example input",
+)
+@click.option(
     "-v",
     "--verbose",
     default=False,
@@ -102,21 +110,24 @@ def get(day: int, year: int, save_path: str, url: str, session: str):
     show_default=True,
     help="verbose logging",
 )
-def run(day: int, year: int, verbose: bool):
+def run(day: int, year: int, example: bool, verbose: bool):
     """Run an adventure.
 
     Args:
         day (int): Day of the adventure, default is today
         year (int): Year of the adventure, default is this year
         code (str): Code to run
-        input (str): Path to the input file
+        example (bool): Run the example input
         verbose (bool): Verbose logging
     """
     if verbose:
         log.setLevel(logging.DEBUG)
         log.debug("Verbose logging enabled.")
     code: str = f"adventures.d{day}y{year}:run"
-    input: str = f"inputs/{year}/{day}.txt"
+    if example:
+        input: str = f"inputs/{year}/{day}-example.txt"
+    else:
+        input = f"inputs/{year}/{day}.txt"
     click.echo(f"Running adventure for Dec {day}, {year}...")
     click.echo(f"Code Import: {code}...")
     # Import the code to run.
